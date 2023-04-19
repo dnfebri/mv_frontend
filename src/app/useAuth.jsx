@@ -25,7 +25,6 @@ export const useAuth = () => {
   }, [auth]);
 
   const getAuthMe = async () => {
-    if (auth) return;
     try {
       const res = await axios.get(`${process.env.API_URL_APP}/user`, {
         headers: {

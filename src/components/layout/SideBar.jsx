@@ -183,38 +183,29 @@ const SideBar = () => {
             className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0`}
             onMouseEnter={() => setSidebarExpanded(true)}
           >
-            <NavLink
-              end
-              to={"#"}
-              className={({ isActive }) =>
-                "block text-slate-400 hover:text-slate-200 transition duration-150 truncate " +
-                (isActive ? "!text-indigo-500" : "")
-              }
-            >
-              <div className="flex items-center">
-                <i
-                  className={`text-2xl hidden ${
-                    sidebarExpanded ? "lg:hidden" : "lg:block"
-                  }`}
-                >
-                  <BiLogOut />
-                </i>
-                {/* <i className="text-2xl"><MdMoveToInbox/></i> */}
-                {/* <i className="text-2xl">icon</i> */}
-                <button onClick={hendelLogout}>
-                  <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                    Logout
-                  </span>
-                </button>
-                <i
-                  className={`text-2xl ml-4 ${
-                    sidebarExpanded ? "lg:block" : "lg:hidden"
-                  }`}
-                >
-                  <BiLogOut />
-                </i>
-              </div>
-            </NavLink>
+            <div className="flex items-center text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+              <i
+                className={`text-2xl hidden ${
+                  sidebarExpanded ? "lg:hidden" : "lg:block"
+                }`}
+              >
+                <BiLogOut />
+              </i>
+              {/* <i className="text-2xl"><MdMoveToInbox/></i> */}
+              {/* <i className="text-2xl">icon</i> */}
+              <button onClick={hendelLogout}>
+                <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                  Logout
+                </span>
+              </button>
+              <i
+                className={`text-2xl ml-4 ${
+                  sidebarExpanded ? "lg:block" : "lg:hidden"
+                }`}
+              >
+                <BiLogOut />
+              </i>
+            </div>
           </div>
           <div className="pt-3 hidden lg:inline-flex 2xl:hidden justify-end w-full">
             <div className="px-3 py-2">

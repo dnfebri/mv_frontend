@@ -47,23 +47,21 @@ const Register = () => {
     formData.append("confPassword", inputs.confPassword);
     formData.append("photo", photo);
 
-    setProses(true, "data.message");
-    navigate("/login");
-    // try {
-    //   const response = await axios.post(
-    //     `${process.env.API_URL_APP}/auth/register`,
-    //     formData
-    //   );
-    //   const data = await response.data;
-    //   setProses(data.success, data.message);
-    //   setIsLoading(false);
-    //   navigate("/login");
-    // } catch (error) {
-    //   console.log(error);
-    //   setMessage(error.response.data.message);
-    //   setRegisterFalse(true);
-    //   setIsLoading(false);
-    // }
+    try {
+      const response = await axios.post(
+        `${process.env.API_URL_APP}/auth/register`,
+        formData
+      );
+      const data = await response.data;
+      setProses(data.success, data.message);
+      setIsLoading(false);
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      setMessage(error.response.data.message);
+      setRegisterFalse(true);
+      setIsLoading(false);
+    }
   };
 
   const onSelectImage = e => {
