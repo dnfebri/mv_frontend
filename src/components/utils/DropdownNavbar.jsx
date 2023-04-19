@@ -1,14 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Transition from './Transition'
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from "react";
+import Transition from "./Transition";
+import { Link } from "react-router-dom";
 // import { useUser } from '../../app/useUser';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../app/useAuth";
+import axios from "axios";
+import Logout from "./Logout";
 
 const DropdownNavbar = () => {
   const navigate = useNavigate();
-  // const {authUser, auth, userRole} = useUser();
+  const { auth, name, username, email, photo, getAuthMe } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
@@ -24,59 +26,70 @@ const DropdownNavbar = () => {
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
-      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) return;
+      if (
+        !dropdownOpen ||
+        dropdown.current.contains(target) ||
+        trigger.current.contains(target)
+      )
+        return;
       setDropdownOpen(false);
     };
-    document.addEventListener('click', clickHandler);
-    return () => document.removeEventListener('click', clickHandler);
+    document.addEventListener("click", clickHandler);
+    return () => document.removeEventListener("click", clickHandler);
   });
-  
+
   // close if the esc key is pressed
   useEffect(() => {
+    getAuthMe();
     const keyHandler = ({ keyCode }) => {
       if (!dropdownOpen || keyCode !== 27) return;
       setDropdownOpen(false);
     };
-    document.addEventListener('keydown', keyHandler);
-    return () => document.removeEventListener('keydown', keyHandler);
+    document.addEventListener("keydown", keyHandler);
+    return () => document.removeEventListener("keydown", keyHandler);
   });
-  
-  const storedDarkMode = localStorage.getItem('dark-mode');
-  const [isDarkMode, setIsDarkMode] = useState(storedDarkMode === null ? false : storedDarkMode === 'true');
+
+  const storedDarkMode = localStorage.getItem("dark-mode");
+  const [isDarkMode, setIsDarkMode] = useState(
+    storedDarkMode === null ? false : storedDarkMode === "true"
+  );
 
   useEffect(() => {
-    localStorage.setItem('dark-mode', isDarkMode);
+    localStorage.setItem("dark-mode", isDarkMode);
     const html = window.document.documentElement;
-    if(isDarkMode) {
-      html.classList.add('dark');
+    if (isDarkMode) {
+      html.classList.add("dark");
     } else {
-      html.classList.remove('dark');
+      html.classList.remove("dark");
     }
   }, [isDarkMode]);
 
-  const darkmode = (e) => {
+  const darkmode = e => {
     if (e.target.checked) {
       setIsDarkMode(true);
     } else {
       setIsDarkMode(false);
     }
-  }
+  };
 
-  const hendelLogout = async() => {
+  const hendelLogout = async () => {
     try {
-      const response = await axios.post(APP_URL_API+'auth/logout', _, {
-        headers: {
-          Authorization : `Bearer ${localStorage.getItem("access_token")}`
+      const response = await axios.post(
+        `${process.env.API_URL_APP}/auth/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
         }
-      });
-      localStorage.removeItem('access_token');
-      // setMessage({});
+      );
+      localStorage.removeItem("access_token");
       navigate("/login");
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
       // setMessage(error.response.data);
     }
-  }
+  };
   return (
     <div className="relative inline-flex">
       <button
@@ -86,10 +99,21 @@ const DropdownNavbar = () => {
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
       >
-        <img className="w-8 h-8 rounded-full" src="/images/logo.svg" width="32" height="32" alt="User" />
+        <img
+          className="w-8 h-8 rounded-full"
+          src="/images/logo.svg"
+          width="32"
+          height="32"
+          alt="User"
+        />
         <div className="flex items-center truncate">
-          <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800 dark:text-slate-200 dark:group-hover:text-slate-300">{'authUser.name'}</span>
-          <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
+          <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800 dark:text-slate-200 dark:group-hover:text-slate-300">
+            {name}
+          </span>
+          <svg
+            className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+            viewBox="0 0 12 12"
+          >
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
           </svg>
         </div>
@@ -111,15 +135,26 @@ const DropdownNavbar = () => {
           onBlur={() => setDropdownOpen(false)}
         >
           <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200">
-            <div className="font-medium text-slate-800 dark:text-slate-200">iki nama</div>
-            <div className="text-xs text-slate-500 italic">iki email</div>
+            <div className="font-medium text-slate-800 dark:text-slate-200">
+              {name}
+            </div>
+            <div className="text-xs text-slate-500 italic">{email}</div>
           </div>
           <ul>
             <li>
               <div className="px-3 py-1">
-                <label htmlFor="dark-mode" className="space-x-2 flex items-center justify-start text-sm">
+                <label
+                  htmlFor="dark-mode"
+                  className="space-x-2 flex items-center justify-start text-sm"
+                >
                   <div className="inline-flex relative items-center cursor-pointer">
-                    <input type="checkbox" value="" id="dark-mode" className="sr-only peer" onChange={darkmode} />
+                    <input
+                      type="checkbox"
+                      value=""
+                      id="dark-mode"
+                      className="sr-only peer"
+                      onChange={darkmode}
+                    />
                     <div className="w-9 h-5 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
                   </div>
                   <span>Dark Mode</span>
@@ -137,14 +172,14 @@ const DropdownNavbar = () => {
             </li>
             <li>
               <button onClick={hendelLogout}>
-                <span className="font-medium text-sm flex items-center py-1 px-3">LogOut</span>
+                <Logout />
               </button>
             </li>
           </ul>
         </div>
       </Transition>
     </div>
-  )
-}
+  );
+};
 
-export default DropdownNavbar
+export default DropdownNavbar;

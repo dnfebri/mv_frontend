@@ -27,6 +27,25 @@ const SideBar = () => {
     }
   }, [sidebarExpanded]);
 
+  const hendelLogout = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.API_URL_APP}/auth/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      localStorage.removeItem("access_token");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      // setMessage(error.response.data);
+    }
+  };
+
   return (
     <div>
       {/* Sidebar backdrop (mobile only) */}
@@ -70,11 +89,7 @@ const SideBar = () => {
           {/* Logo */}
           <a href="/" className="block">
             {/* <img src={'LogoUA'} alt="Logo UA" className={`w-16`} /> */}
-            <img
-              src="/images/logo.svg"
-              className="h-10"
-              alt="Flowbite Logo"
-            />
+            <img src="/images/logo.svg" className="h-10" alt="Flowbite Logo" />
           </a>
         </div>
 
@@ -92,7 +107,7 @@ const SideBar = () => {
                   <h3 className="text-xs uppercase text-slate-500 font-semibold pl-3 pt-2">
                     <span
                       className="hidden lg:block lg:sidebar-expanded:hidden 2xl:hidden text-center w-6"
-                      aria-hidden="true"
+                      ariaHidden="true"
                     >
                       •••
                     </span>
@@ -164,10 +179,13 @@ const SideBar = () => {
 
         {/* Expand / collapse button */}
         <div className=" mt-auto">
-          <div className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0`}>
+          <div
+            className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0`}
+            onMouseEnter={() => setSidebarExpanded(true)}
+          >
             <NavLink
               end
-              to={'#'}
+              to={"#"}
               className={({ isActive }) =>
                 "block text-slate-400 hover:text-slate-200 transition duration-150 truncate " +
                 (isActive ? "!text-indigo-500" : "")
@@ -183,9 +201,11 @@ const SideBar = () => {
                 </i>
                 {/* <i className="text-2xl"><MdMoveToInbox/></i> */}
                 {/* <i className="text-2xl">icon</i> */}
-                <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                  Logout 
-                </span>
+                <button onClick={hendelLogout}>
+                  <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                    Logout
+                  </span>
+                </button>
                 <i
                   className={`text-2xl ml-4 ${
                     sidebarExpanded ? "lg:block" : "lg:hidden"
