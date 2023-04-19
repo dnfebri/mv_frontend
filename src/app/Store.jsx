@@ -1,10 +1,31 @@
 import { create } from 'zustand'
 
-export const useStore = create((set) => ({
-  bears: 0,
-  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-  removeAllBears: () => set({ bears: 0 }),
+const store = create((set) => ({
+  isSuccess: false,
+  isLoading: false,
+  message: ''
 }));
+
+export const useStoreApp = () => {
+  const isSuccess = store((e) => e.isSuccess);
+  const isLoading = store((e) => e.isLoading);
+  const message = store((e) => e.message);
+
+  const setProses = (isSuccess, message) => {
+    store.setState({
+      isSuccess: isSuccess,
+      message: message
+    })
+  }
+
+  const setIsLoading = (isLoading) => {
+    store.setState({
+      isLoading: isLoading
+    })
+  }
+
+  return {isSuccess, isLoading, message, setProses, setIsLoading}
+}
 
 export const useSidebarOpen = create((set) => ({
   open: false,

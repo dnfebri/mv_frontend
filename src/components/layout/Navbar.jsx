@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSidebarOpen } from '../../app/Store'
-import UserNavbar from './UserNavbar';
 import DropdownNavbar from '../utils/DropdownNavbar';
 
 const Navbar = () => {

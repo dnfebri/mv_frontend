@@ -40,6 +40,9 @@ const DropdownNavbar = () => {
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
   });
+  
+  const storedDarkMode = localStorage.getItem('dark-mode');
+  const [isDarkMode, setIsDarkMode] = useState(storedDarkMode === null ? false : storedDarkMode === 'true');
 
   useEffect(() => {
     localStorage.setItem('dark-mode', isDarkMode);
@@ -49,10 +52,7 @@ const DropdownNavbar = () => {
     } else {
       html.classList.remove('dark');
     }
-  })
-  
-  const storedDarkMode = localStorage.getItem('dark-mode');
-  const [isDarkMode, setIsDarkMode] = useState(storedDarkMode === null ? false : storedDarkMode === 'true');
+  }, [isDarkMode]);
 
   const darkmode = (e) => {
     if (e.target.checked) {
@@ -88,7 +88,7 @@ const DropdownNavbar = () => {
       >
         <img className="w-8 h-8 rounded-full" src="/images/logo.svg" width="32" height="32" alt="User" />
         <div className="flex items-center truncate">
-          <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800 dark:group-hover:text-slate-200">{'authUser.name'}</span>
+          <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800 dark:text-slate-200 dark:group-hover:text-slate-300">{'authUser.name'}</span>
           <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
           </svg>

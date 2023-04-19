@@ -71,7 +71,7 @@ const SideBar = () => {
           <a href="/" className="block">
             {/* <img src={'LogoUA'} alt="Logo UA" className={`w-16`} /> */}
             <img
-              src="https://flowbite.com/docs/images/logo.svg"
+              src="/images/logo.svg"
               className="h-10"
               alt="Flowbite Logo"
             />
