@@ -49,10 +49,13 @@ const User = () => {
     }
   };
   const imageExists = async url => {
-    const result = await fetch(url, { method: "HEAD" });
-    setIsImageExists(result.ok);
+    try {
+      const result = await axios.get(url);
+      setIsImageExists(true);
+    } catch (error) {
+      setIsImageExists(false);
+    }
   };
-
   const toastId = React.useRef(null);
   useEffect(() => {
     if (isSuccess) {

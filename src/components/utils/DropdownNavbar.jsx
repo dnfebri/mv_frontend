@@ -11,9 +11,18 @@ const DropdownNavbar = () => {
   const navigate = useNavigate();
   const { auth, name, username, email, photo, getAuthMe } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isImageExists, setIsImageExists] = useState(false);
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
+  const imageExists = async url => {
+    try {
+      const result = await axios.get(url);
+      setIsImageExists(true);
+    } catch (error) {
+      setIsImageExists(false);
+    }
+  };
   // useEffect(() => {
   //   if (localStorage.getItem('access_token')) {
   //     if (!auth) {
@@ -25,6 +34,7 @@ const DropdownNavbar = () => {
   // }, [localStorage, auth])
   // close on click outside
   useEffect(() => {
+    imageExists(photo);
     const clickHandler = ({ target }) => {
       if (
         !dropdownOpen ||
@@ -100,8 +110,8 @@ const DropdownNavbar = () => {
         aria-expanded={dropdownOpen}
       >
         <img
-          className="w-8 h-8 rounded-full"
-          src="/images/logo.svg"
+          className="w-8 h-8 rounded-full object-cover object-center"
+          src={isImageExists ? photo : process.env.API_URL_APP + photo}
           width="32"
           height="32"
           alt="User"
