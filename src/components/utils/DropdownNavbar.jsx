@@ -46,18 +46,20 @@ const DropdownNavbar = () => {
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  });
+  }, []);
 
   // close if the esc key is pressed
   useEffect(() => {
-    getAuthMe();
+    if (!auth) {
+      getAuthMe();
+    }
     const keyHandler = ({ keyCode }) => {
       if (!dropdownOpen || keyCode !== 27) return;
       setDropdownOpen(false);
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
-  });
+  }, [auth]);
 
   const storedDarkMode = localStorage.getItem("dark-mode");
   const [isDarkMode, setIsDarkMode] = useState(

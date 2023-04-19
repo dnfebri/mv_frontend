@@ -13,10 +13,10 @@ export const useStoreApp = () => {
   const isLoading = store(e => e.isLoading);
   const message = store(e => e.message);
 
-  const setProses = (isSuccess, message) => {
+  const setProses = (isSuccess, msg) => {
     store.setState({
       isSuccess: isSuccess,
-      message: message,
+      message: msg,
     });
   };
 
@@ -31,6 +31,11 @@ export const useStoreApp = () => {
       isError: isError,
     });
   };
+  const setMessage = message => {
+    store.setState({
+      message: message,
+    });
+  };
 
   return {
     isError,
@@ -40,6 +45,7 @@ export const useStoreApp = () => {
     setProses,
     setIsLoading,
     setIsError,
+    setMessage,
   };
 };
 

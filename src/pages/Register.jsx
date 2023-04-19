@@ -9,10 +9,18 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { isLoading, setIsLoading, setProses } = useStoreApp();
+  const {
+    isLoading,
+    isSuccess,
+    message,
+    setIsLoading,
+    setProses,
+    isError,
+    setIsError,
+    setMessage,
+  } = useStoreApp();
   const [inputs, setInputs] = useState({});
   const [registerFalse, setRegisterFalse] = useState(false);
-  const [message, setMessage] = useState("");
   const [previewImg, setPreviewImg] = useState();
   const [photo, setPhoto] = useState({});
 
@@ -58,9 +66,9 @@ const Register = () => {
       navigate("/login");
     } catch (error) {
       console.log(error);
-      setMessage(error.response.data.message);
-      setRegisterFalse(true);
       setIsLoading(false);
+      setIsError(true);
+      setMessage(error.response.data.message);
     }
   };
 
@@ -74,13 +82,21 @@ const Register = () => {
 
   const toastId = React.useRef(null);
   useEffect(() => {
-    if (registerFalse) {
-      toastId.current = toast.warn(message, {
+    if (isSuccess) {
+      console.log(isSuccess);
+      toastId.current = toast.success(message, {
         position: toast.POSITION.TOP_RIGHT,
       });
-      setRegisterFalse(false);
+      setProses(false, "");
     }
-  }, [registerFalse]);
+    if (isError) {
+      toastId.current = toast.error(message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      setIsError(false);
+      setMessage("");
+    }
+  }, [isSuccess, isError, message]);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-neutral-200 dark:bg-neutral-800">

@@ -19,7 +19,7 @@ export const useAuth = () => {
   const photo = authMe(e => e.photo);
   const authMesaage = authMe(e => e.authMesaage);
   useEffect(() => {
-    if (auth) {
+    if (!auth) {
       getAuthMe();
     }
   }, [auth]);

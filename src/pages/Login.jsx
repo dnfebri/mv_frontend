@@ -9,10 +9,17 @@ import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { isLoading, setIsLoading, isSuccess, setProses, message } =
-    useStoreApp();
+  const {
+    isLoading,
+    isSuccess,
+    message,
+    setIsLoading,
+    setProses,
+    isError,
+    setIsError,
+    setMessage,
+  } = useStoreApp();
   const [inputs, setInputs] = useState({});
-  const [loginFalse, setLoginFalse] = useState(false);
 
   const storedDarkMode = localStorage.getItem("dark-mode");
   const [isDarkMode, setIsDarkMode] = useState(
@@ -42,16 +49,23 @@ const Login = () => {
     } else {
       html.classList.remove("dark");
     }
-    if (isSuccess && toastId.current === null) {
+    if (isSuccess) {
       toastId.current = toast.success(message, {
         position: toast.POSITION.TOP_RIGHT,
       });
       setProses(false, "");
     }
+    if (isError) {
+      toastId.current = toast.error(message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      setIsError(false);
+      setMessage("");
+    }
     // if (localStorage.getItem("access_token")) {
     //   getAuth();
     // }
-  }, [isDarkMode, isSuccess, message]);
+  }, [isDarkMode, isSuccess, isError, message]);
 
   const handleChange = event => {
     const name = event.target.name;
@@ -75,9 +89,9 @@ const Login = () => {
       navigate("/");
     } catch (error) {
       console.log(error);
-      setProses(false, error.response.data.message);
-      setLoginFalse(true);
       setIsLoading(false);
+      setIsError(true);
+      setMessage(error.response.data.message);
     }
   };
 
@@ -90,7 +104,7 @@ const Login = () => {
           alt="Logo"
           className="invert dark:invert-0 w-20 mx-auto"
         />
-        {message && (
+        {isError && (
           <div className="text-center text-red-500 mt-4">
             <p>{message}</p>
           </div>

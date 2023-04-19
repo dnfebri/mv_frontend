@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/layout/Layout";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import InputModel1 from "../components/input/InputModel1";
 import { useStoreApp } from "../app/Store";
 import axios from "axios";
@@ -15,6 +16,7 @@ const User = () => {
     setProses,
     isError,
     setIsError,
+    setMessage,
   } = useStoreApp();
   const { getAuthMe } = useAuth();
   const [inputs, setInputs] = useState({});
@@ -59,13 +61,21 @@ const User = () => {
   const toastId = React.useRef(null);
   useEffect(() => {
     if (isSuccess) {
+      console.log(isSuccess);
       toastId.current = toast.success(message, {
         position: toast.POSITION.TOP_RIGHT,
       });
       setProses(false, "");
     }
+    if (isError) {
+      toastId.current = toast.error(message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      setIsError(false);
+      setMessage("");
+    }
     getUserId();
-  }, [isSuccess, message]);
+  }, [isSuccess, isError, message]);
 
   const updateUser = async () => {
     const formData = new FormData();
@@ -93,10 +103,9 @@ const User = () => {
       setIsError(false);
     } catch (error) {
       console.log(error);
-      setProses(error.response.data.success, error.response.data.message);
-      // setRegisterFalse(true);
       setIsLoading(false);
       setIsError(true);
+      setMessage(error.response.data.message);
     }
   };
 
