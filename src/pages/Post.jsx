@@ -7,6 +7,7 @@ import { useStoreApp } from "../app/Store";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { usePost } from "../app/usePost";
+import { useAuth } from "../app/useAuth";
 
 const Post = () => {
   const {
@@ -21,6 +22,8 @@ const Post = () => {
   } = useStoreApp();
   const { postId, isShowModal, setIsShowModal, isNameModal, setIsNameModal } =
     usePost();
+  const { idUser } = useAuth();
+  console.log(idUser);
   const toastId = useRef(null);
   useEffect(() => {
     if (isSuccess) {

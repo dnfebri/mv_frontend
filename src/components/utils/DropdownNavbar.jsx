@@ -148,7 +148,7 @@ const DropdownNavbar = () => {
         >
           <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200">
             <div className="font-medium text-slate-800 dark:text-slate-200">
-              {name}
+              {username}
             </div>
             <div className="text-xs text-slate-500 italic">{email}</div>
           </div>

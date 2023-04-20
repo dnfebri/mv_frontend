@@ -1,5 +1,6 @@
 import React from "react";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { RiErrorWarningLine } from "react-icons/ri";
 import { useLocation } from "react-router-dom";
 import { useStoreApp } from "../../app/Store";
 import { usePost } from "../../app/usePost";
@@ -98,82 +99,93 @@ const PostsListItem = props => {
   // });
   return (
     <div className="flex flex-wrap justify-evenly gap-4">
-      {data.map((row, idx) => (
-        <div
-          key={idx}
-          className="w-full max-w-[18rem] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative"
-        >
-          <div className="h-52 rounded-t-lg overflow-hidden">
-            <img
-              className="w-full h-full object-cover object-center"
-              src={row.image}
-              alt={row.caption}
-            />
-          </div>
-          <div
-            className={`px-5 mt-2 ${
-              pathname.includes("post") ? "pb-12" : "pb-5"
-            }`}
-          >
-            <div className="flex h-8 items-center gap-2 text-lg text-blue-700">
-              {/* <AiFillLike /> {row.likes} */}
-              {row.user_like_posts.length > 0 ? (
-                <>
-                  {/* <AiFillLike /> */}
-                  {row.user_like_posts.map((like, i) => {
-                    return like.user.username === username &&
-                      like.like !== 0 ? (
-                      <button key={i} onClick={() => handleUnLike(row.id)}>
-                        <AiFillLike />
-                      </button>
-                    ) : i + 1 == row.user_like_posts.length ? (
-                      <button key={i} onClick={() => handleLike(row.id)}>
-                        <AiOutlineLike />
-                      </button>
-                    ) : null;
-                  })}
-                </>
-              ) : (
-                <button onClick={() => handleLike(row.id)}>
-                  <AiOutlineLike />
-                </button>
-              )}
-              <p>{row.likes > 0 ? row.likes : ""}</p>
-            </div>
-            <h5 className="text-lg tracking-tight text-blue-900 dark:text-blue-300">
-              {row.user.username}
-            </h5>
-            <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-              {row.caption}
-            </h5>
-            <div className="my-2">
-              <p className="text-blue-500 text-xs">{row.tags}</p>
-            </div>
+      {data.length > 0 ? (
+        <>
+          {data.map((row, idx) => (
             <div
-              className={`absolute bottom-0 left-0 right-0 px-5 my-2 flex justify-end gap-2 text-white ${
-                pathname.includes("post") ? "" : "hidden"
-              }`}
+              key={idx}
+              className="w-full max-w-[18rem] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative"
             >
-              <button
-                className="px-4 py-1 rounded-full bg-slate-500 hover:bg-slate-600 transition-all duration-150"
-                onClick={() => {
-                  setIsShowModal(true);
-                  setIsNameModal("Edit post");
-                  setPostId(row.id);
-                }}
+              <div className="h-52 rounded-t-lg overflow-hidden">
+                <img
+                  className="w-full h-full object-cover object-center"
+                  src={row.image}
+                  alt={row.caption}
+                />
+              </div>
+              <div
+                className={`px-5 mt-2 ${
+                  pathname.includes("post") ? "pb-12" : "pb-5"
+                }`}
               >
-                Edit
-              </button>
-              <button
-                onClick={() => handeleDelete(row.id)}
-                className="px-4 py-1 rounded-full bg-red-500 hover:bg-red-600 transition-all duration-150"
-              >
-                Delete
-              </button>
+                <div className="flex h-8 items-center gap-2 text-lg text-blue-700">
+                  {/* <AiFillLike /> {row.likes} */}
+                  {row.user_like_posts.length > 0 ? (
+                    <>
+                      {/* <AiFillLike /> */}
+                      {row.user_like_posts.map((like, i) => {
+                        return like.user.username === username &&
+                          like.like !== 0 ? (
+                          <button key={i} onClick={() => handleUnLike(row.id)}>
+                            <AiFillLike />
+                          </button>
+                        ) : i + 1 == row.user_like_posts.length ? (
+                          <button key={i} onClick={() => handleLike(row.id)}>
+                            <AiOutlineLike />
+                          </button>
+                        ) : null;
+                      })}
+                    </>
+                  ) : (
+                    <button onClick={() => handleLike(row.id)}>
+                      <AiOutlineLike />
+                    </button>
+                  )}
+                  <p>{row.likes > 0 ? row.likes : ""}</p>
+                </div>
+                <h5 className="text-lg tracking-tight text-blue-900 dark:text-blue-300">
+                  {row.user.username}
+                </h5>
+                <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                  {row.caption}
+                </h5>
+                <div className="my-2">
+                  <p className="text-blue-500 text-xs">{row.tags}</p>
+                </div>
+                <div
+                  className={`absolute bottom-0 left-0 right-0 px-5 my-2 flex justify-end gap-2 text-white ${
+                    pathname.includes("post") ? "" : "hidden"
+                  }`}
+                >
+                  <button
+                    className="px-4 py-1 rounded-full bg-slate-500 hover:bg-slate-600 transition-all duration-150"
+                    onClick={() => {
+                      setIsShowModal(true);
+                      setIsNameModal("Edit post");
+                      setPostId(row.id);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handeleDelete(row.id)}
+                    className="px-4 py-1 rounded-full bg-red-500 hover:bg-red-600 transition-all duration-150"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
+        </>
+      ) : (
+        <div className="min-h-[20rem] flex items-center">
+          <i className="text-7xl text-red-700 mr-2">
+            <RiErrorWarningLine />
+          </i>
+          <h1 className="text-2xl text-black font-black">No Data Available</h1>
         </div>
-      ))}
+      )}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { create } from "zustand";
 
 const authMe = create(set => ({
   auth: false,
+  idUser: 0,
   name: "",
   username: "",
   email: "",
@@ -13,6 +14,7 @@ const authMe = create(set => ({
 
 export const useAuth = () => {
   const auth = authMe(e => e.auth);
+  const idUser = authMe(e => e.idUser);
   const name = authMe(e => e.name);
   const username = authMe(e => e.username);
   const email = authMe(e => e.email);
@@ -34,6 +36,7 @@ export const useAuth = () => {
       const data = await res.data;
       authMe.setState({
         auth: data.success,
+        idUser: data.data.id,
         name: data.data.name,
         username: data.data.username,
         email: data.data.email,
@@ -51,6 +54,7 @@ export const useAuth = () => {
   return {
     getAuthMe,
     auth,
+    idUser,
     name,
     username,
     email,

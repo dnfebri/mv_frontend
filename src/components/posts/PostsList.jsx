@@ -4,6 +4,8 @@ import ReactPaginate from "react-paginate";
 import PostsListItem from "./PostsListItem";
 import { useNavigate } from "react-router-dom";
 import { useStoreApp } from "../../app/Store";
+import { useAuth } from "../../app/useAuth";
+import { useLocation } from "react-router-dom";
 
 const PostsList = () => {
   const {
@@ -18,28 +20,34 @@ const PostsList = () => {
     isShowModal,
     setIsShowModal,
   } = useStoreApp();
+  const { idUser, auth } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(8);
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(0);
   const [searchKey, setSearctKey] = useState("");
   const getPosts = async (p = 0) => {
+    let url = `${
+      process.env.API_URL_APP
+    }/post?page=${p}&limit=${limit}&search=${searchKey.replaceAll("#", "")}`;
+    if (pathname.includes("post")) {
+      url = `${
+        process.env.API_URL_APP
+      }/post/user/${idUser}?page=${p}&limit=${limit}&search=${searchKey.replaceAll(
+        "#",
+        ""
+      )}`;
+    }
     try {
-      const response = await axios.get(
-        `${
-          process.env.API_URL_APP
-        }/post?page=${p}&limit=${limit}&search=${searchKey.replaceAll(
-          "#",
-          ""
-        )}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
       const result = await response.data;
+      console.log(result);
       setPosts(result.data.result);
       setLimit(result.data.pagination.limit);
       setPage(result.data.pagination.page);
@@ -59,9 +67,9 @@ const PostsList = () => {
       getPosts(page);
       setProses(false, "");
     } else {
-      getPosts(page);
+      if (auth) getPosts(page);
     }
-  }, [isSuccess]);
+  }, [isSuccess, auth]);
 
   const hendelSearch = e => {
     e.preventDefault();
