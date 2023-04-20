@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useStoreApp } from "../../app/Store";
 import axios from "axios";
+import { usePost } from "../../app/usePost";
+import { useNavigate } from "react-router-dom";
 
-const PostModal = ({ title }) => {
+const PostModal = ({ title, postId }) => {
+  const navigate = useNavigate();
   const {
     isLoading,
     isSuccess,
@@ -12,12 +15,40 @@ const PostModal = ({ title }) => {
     isError,
     setIsError,
     setMessage,
-    isShowModal,
-    setIsShowModal,
   } = useStoreApp();
+  const { setPostId, setIsShowModal, setIsNameModal } = usePost();
   const [inputs, setInputs] = useState({});
   const [previewImg, setPreviewImg] = useState();
   const [image, setImage] = useState({});
+
+  console.log(postId);
+  const getPostById = async id => {
+    try {
+      const response = await axios.get(
+        `${process.env.API_URL_APP}/post/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      const result = await response.data.data;
+      setInputs(result);
+      // setPostId(0);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      const status = await error.response.status;
+      if (status === 403 || status === 401) {
+        navigate("/login");
+      }
+    }
+  };
+  useEffect(() => {
+    if (postId !== 0) {
+      getPostById(postId);
+    }
+  }, [postId]);
 
   const handleChange = event => {
     const name = event.target.name;
@@ -38,15 +69,28 @@ const PostModal = ({ title }) => {
     formData.append("tags", inputs.tags);
     formData.append("image", image);
     try {
-      const response = await axios.post(
-        `${process.env.API_URL_APP}/post`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      let response = {};
+      if (postId === 0) {
+        response = await axios.post(
+          `${process.env.API_URL_APP}/post`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+          }
+        );
+      } else {
+        response = await axios.put(
+          `${process.env.API_URL_APP}/post/${postId}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+          }
+        );
+      }
       const data = await response.data;
       setProses(data.success, data.message);
       setIsLoading(false);
@@ -58,6 +102,10 @@ const PostModal = ({ title }) => {
       setMessage(error.response.data.message);
     }
   };
+  const handelColse = () => {
+    setIsShowModal(false);
+    setIsNameModal("");
+  };
   return (
     <>
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -68,10 +116,10 @@ const PostModal = ({ title }) => {
             <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
               <h3 className="text-3xl font-semibold">{title}</h3>
               <button
-                className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                onClick={() => setIsShowModal(false)}
+                className="p-1 ml-auto bg-transparent border-0 text-black dark:text-white float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                onClick={handelColse}
               >
-                <span className="bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
+                <span className="bg-transparent text-black dark:text-white h-6 w-6 text-2xl block outline-none focus:outline-none">
                   ×
                 </span>
               </button>
@@ -93,7 +141,7 @@ const PostModal = ({ title }) => {
                   <div className="h-32 w-32 mt-6 mx-4">
                     <img
                       className="object-cover object-center h-full w-full"
-                      src={previewImg ?? "/images/noImage.jpg"}
+                      src={previewImg ?? inputs.image}
                     />
                   </div>
                   <div className="my-6">
@@ -131,7 +179,7 @@ const PostModal = ({ title }) => {
                 <button
                   className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   type="button"
-                  onClick={() => setIsShowModal(false)}
+                  onClick={handelColse}
                 >
                   Close
                 </button>

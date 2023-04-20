@@ -6,6 +6,7 @@ import PostModal from "../components/posts/PostModal";
 import { useStoreApp } from "../app/Store";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { usePost } from "../app/usePost";
 
 const Post = () => {
   const {
@@ -17,9 +18,9 @@ const Post = () => {
     isError,
     setIsError,
     setMessage,
-    isShowModal,
-    setIsShowModal,
   } = useStoreApp();
+  const { postId, isShowModal, setIsShowModal, isNameModal, setIsNameModal } =
+    usePost();
   const toastId = useRef(null);
   useEffect(() => {
     if (isSuccess) {
@@ -45,7 +46,10 @@ const Post = () => {
         <div className="relative">
           <button
             className="h-10 w-10 flex justify-center items-center rounded-full border-2 border-black bg-green-100 group-hover:bg-green-400 transition-all duration-150"
-            onClick={() => setIsShowModal(true)}
+            onClick={() => {
+              setIsShowModal(true);
+              setIsNameModal("Create post");
+            }}
           >
             <i className="text-xl">
               <BsPlusLg />
@@ -58,7 +62,7 @@ const Post = () => {
           </div>
         </div>
       </div>
-      {isShowModal ? <PostModal title={"Create Post"} /> : null}
+      {isShowModal ? <PostModal title={isNameModal} postId={postId} /> : null}
     </Layout>
   );
 };

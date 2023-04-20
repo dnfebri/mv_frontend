@@ -5,7 +5,6 @@ const store = create(set => ({
   isSuccess: false,
   isLoading: false,
   message: "",
-  isShowModal: false,
 }));
 
 export const useStoreApp = () => {
@@ -13,7 +12,6 @@ export const useStoreApp = () => {
   const isSuccess = store(e => e.isSuccess);
   const isLoading = store(e => e.isLoading);
   const message = store(e => e.message);
-  const isShowModal = store(e => e.isShowModal);
 
   const setProses = (isSuccess, msg) => {
     store.setState({
@@ -39,12 +37,6 @@ export const useStoreApp = () => {
     });
   };
 
-  const setIsShowModal = set => {
-    store.setState({
-      isShowModal: set,
-    });
-  };
-
   return {
     isError,
     isSuccess,
@@ -54,8 +46,6 @@ export const useStoreApp = () => {
     setIsLoading,
     setIsError,
     setMessage,
-    isShowModal,
-    setIsShowModal,
   };
 };
 

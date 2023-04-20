@@ -1,9 +1,23 @@
 import React from "react";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
+import { useStoreApp } from "../../app/Store";
+import { usePost } from "../../app/usePost";
 
 const PostsListItem = props => {
   const { data } = props;
+  const {
+    isLoading,
+    isSuccess,
+    message,
+    setIsLoading,
+    setProses,
+    isError,
+    setIsError,
+    setMessage,
+    isShowModal,
+  } = useStoreApp();
+  const { setPostId, setIsShowModal, setIsNameModal } = usePost();
   const { pathname } = useLocation();
   return (
     <div className="flex flex-wrap justify-evenly gap-4">
@@ -45,7 +59,14 @@ const PostsListItem = props => {
                 pathname.includes("post") ? "" : "hidden"
               }`}
             >
-              <button className="px-4 py-1 rounded-full bg-slate-500 hover:bg-slate-600 transition-all duration-150">
+              <button
+                className="px-4 py-1 rounded-full bg-slate-500 hover:bg-slate-600 transition-all duration-150"
+                onClick={() => {
+                  setIsShowModal(true);
+                  setIsNameModal("Edit post");
+                  setPostId(row.id);
+                }}
+              >
                 Edit
               </button>
               <button className="px-4 py-1 rounded-full bg-red-500 hover:bg-red-600 transition-all duration-150">

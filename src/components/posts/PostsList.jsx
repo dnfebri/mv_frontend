@@ -45,8 +45,10 @@ const PostsList = () => {
       setLimit(result.data.pagination.limit);
       setPage(result.data.pagination.page);
       setPages(result.data.pagination.pages);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       const status = await error.response.status;
       if (status === 403 || status === 401) {
         navigate("/login");
@@ -63,6 +65,7 @@ const PostsList = () => {
 
   const hendelSearch = e => {
     e.preventDefault();
+    setIsLoading(true);
     setPage(0);
     getPosts(0);
   };
