@@ -12,7 +12,12 @@ const PostsList = () => {
   const getPosts = async p => {
     try {
       const response = await axios.get(
-        `${process.env.API_URL_APP}/post?page=${p}&limit=${limit}&search=${searchKey}`,
+        `${
+          process.env.API_URL_APP
+        }/post?page=${p}&limit=${limit}&search=${searchKey.replaceAll(
+          "#",
+          ""
+        )}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
