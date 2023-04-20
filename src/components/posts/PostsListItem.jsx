@@ -3,6 +3,7 @@ import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
 import { useStoreApp } from "../../app/Store";
 import { usePost } from "../../app/usePost";
+import axios from "axios";
 
 const PostsListItem = props => {
   const { data } = props;
@@ -19,6 +20,33 @@ const PostsListItem = props => {
   } = useStoreApp();
   const { setPostId, setIsShowModal, setIsNameModal } = usePost();
   const { pathname } = useLocation();
+
+  const deletePost = async id => {
+    try {
+      const response = await axios.delete(
+        `${process.env.API_URL_APP}/post/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      const result = await response.data;
+      setProses(result.success, result.message);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      const status = await error.response.status;
+      if (status === 403 || status === 401) {
+        navigate("/login");
+      }
+    }
+  };
+  const handeleDelete = id => {
+    if (confirm("Are you sure deleted post!")) {
+      deletePost(id);
+    }
+  };
   return (
     <div className="flex flex-wrap justify-evenly gap-4">
       {data.map((row, idx) => (
@@ -69,7 +97,10 @@ const PostsListItem = props => {
               >
                 Edit
               </button>
-              <button className="px-4 py-1 rounded-full bg-red-500 hover:bg-red-600 transition-all duration-150">
+              <button
+                onClick={() => handeleDelete(row.id)}
+                className="px-4 py-1 rounded-full bg-red-500 hover:bg-red-600 transition-all duration-150"
+              >
                 Delete
               </button>
             </div>

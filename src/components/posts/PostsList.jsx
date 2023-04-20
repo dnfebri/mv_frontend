@@ -40,7 +40,6 @@ const PostsList = () => {
         }
       );
       const result = await response.data;
-      // console.log(result.data);
       setPosts(result.data.result);
       setLimit(result.data.pagination.limit);
       setPage(result.data.pagination.page);
@@ -56,10 +55,11 @@ const PostsList = () => {
     }
   };
   useEffect(() => {
-    getPosts(page);
     if (isSuccess) {
       getPosts(page);
       setProses(false, "");
+    } else {
+      getPosts(page);
     }
   }, [isSuccess]);
 
@@ -74,6 +74,7 @@ const PostsList = () => {
     setPage(selected);
     getPosts(selected);
   };
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <div className="pb-4 pt-2 bg-white dark:bg-gray-900">

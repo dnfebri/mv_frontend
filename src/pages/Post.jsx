@@ -24,7 +24,6 @@ const Post = () => {
   const toastId = useRef(null);
   useEffect(() => {
     if (isSuccess) {
-      console.log(isSuccess);
       toastId.current = toast.success(message, {
         position: toast.POSITION.TOP_RIGHT,
       });

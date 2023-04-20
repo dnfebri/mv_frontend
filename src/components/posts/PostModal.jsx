@@ -21,7 +21,6 @@ const PostModal = ({ title, postId }) => {
   const [previewImg, setPreviewImg] = useState();
   const [image, setImage] = useState({});
 
-  console.log(postId);
   const getPostById = async id => {
     try {
       const response = await axios.get(
