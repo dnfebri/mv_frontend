@@ -2,14 +2,29 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import PostsListItem from "./PostsListItem";
+import { useNavigate } from "react-router-dom";
+import { useStoreApp } from "../../app/Store";
 
 const PostsList = () => {
+  const {
+    isLoading,
+    isSuccess,
+    message,
+    setIsLoading,
+    setProses,
+    isError,
+    setIsError,
+    setMessage,
+    isShowModal,
+    setIsShowModal,
+  } = useStoreApp();
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(8);
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(0);
   const [searchKey, setSearctKey] = useState("");
-  const getPosts = async p => {
+  const getPosts = async (p = 0) => {
     try {
       const response = await axios.get(
         `${
@@ -25,18 +40,26 @@ const PostsList = () => {
         }
       );
       const result = await response.data;
-      console.log(result.data.pagination);
+      // console.log(result.data);
       setPosts(result.data.result);
       setLimit(result.data.pagination.limit);
       setPage(result.data.pagination.page);
       setPages(result.data.pagination.pages);
     } catch (error) {
       console.log(error);
+      const status = await error.response.status;
+      if (status === 403 || status === 401) {
+        navigate("/login");
+      }
     }
   };
   useEffect(() => {
     getPosts(page);
-  }, []);
+    if (isSuccess) {
+      getPosts(page);
+      setProses(false, "");
+    }
+  }, [isSuccess]);
 
   const hendelSearch = e => {
     e.preventDefault();
@@ -50,7 +73,7 @@ const PostsList = () => {
   };
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <div className="pb-4 bg-white dark:bg-gray-900">
+      <div className="pb-4 pt-2 bg-white dark:bg-gray-900">
         <div className="relative mt-1 mx-2">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
@@ -78,27 +101,27 @@ const PostsList = () => {
             />
           </form>
         </div>
-      </div>
-      <div className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <PostsListItem data={posts} />
-      </div>
-      <div
-        className="my-8 flex justify-center"
-        role="navigation"
-        aria-label="pagination"
-      >
-        <ReactPaginate
-          previousLabel={"< Prev"}
-          nextLabel={"next >"}
-          pageCount={pages}
-          onPageChange={pageChange}
-          containerClassName={"paginate-container"}
-          pageLinkClassName={"paginate-page-button"}
-          previousClassName={"paginate-page-button"}
-          nextLinkClassName={"paginate-page-button"}
-          activeClassName={"paginate-activeLink"}
-          disabledLinkClassName={"paginate-disabledLink"}
-        />
+        <div className="mt-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <PostsListItem data={posts} />
+        </div>
+        <div
+          className="my-8 flex justify-center"
+          role="navigation"
+          aria-label="pagination"
+        >
+          <ReactPaginate
+            previousLabel={"< Prev"}
+            nextLabel={"next >"}
+            pageCount={pages}
+            onPageChange={pageChange}
+            containerClassName={"paginate-container"}
+            pageLinkClassName={"paginate-page-button"}
+            previousClassName={"paginate-page-button"}
+            nextLinkClassName={"paginate-page-button"}
+            activeClassName={"paginate-activeLink"}
+            disabledLinkClassName={"paginate-disabledLink"}
+          />
+        </div>
       </div>
     </div>
   );

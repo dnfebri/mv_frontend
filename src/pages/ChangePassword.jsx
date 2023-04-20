@@ -6,8 +6,10 @@ import { useStoreApp } from "../app/Store";
 import InputModel1 from "../components/input/InputModel1";
 import axios from "axios";
 import { useAuth } from "../app/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const ChangePassword = () => {
+  const navigate = useNavigate();
   const {
     isLoading,
     isSuccess,
@@ -50,6 +52,10 @@ const ChangePassword = () => {
       setIsLoading(false);
       setIsError(true);
       setMessage(error.response.data.message);
+      const status = await error.response.status;
+      if (status === 403 || status === 401) {
+        navigate("/login");
+      }
     }
   };
   const toastId = React.useRef(null);

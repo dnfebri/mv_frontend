@@ -20,7 +20,6 @@ const Register = () => {
     setMessage,
   } = useStoreApp();
   const [inputs, setInputs] = useState({});
-  const [registerFalse, setRegisterFalse] = useState(false);
   const [previewImg, setPreviewImg] = useState();
   const [photo, setPhoto] = useState({});
 

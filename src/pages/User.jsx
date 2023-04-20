@@ -6,8 +6,10 @@ import InputModel1 from "../components/input/InputModel1";
 import { useStoreApp } from "../app/Store";
 import axios from "axios";
 import { useAuth } from "../app/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const User = () => {
+  const navigate = useNavigate();
   const {
     isLoading,
     isSuccess,
@@ -48,6 +50,10 @@ const User = () => {
       imageExists(data.photo);
     } catch (error) {
       console.log(error);
+      const status = await error.response.status;
+      if (status === 403 || status === 401) {
+        navigate("/login");
+      }
     }
   };
   const imageExists = async url => {
