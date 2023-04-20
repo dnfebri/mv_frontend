@@ -5,6 +5,7 @@ import { useStoreApp } from "../app/Store";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import PostsList from "../components/posts/PostsList";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Dashboard = () => {
   return (
     <Layout>
       <ToastContainer />
-      <h1 className="bg-blue-700 dark:bg-red-700">Dashboard</h1>
+      <PostsList />
     </Layout>
   );
 };

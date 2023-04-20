@@ -11,6 +11,7 @@ specifiers:
   react: ^18.2.0
   react-dom: ^18.2.0
   react-icons: ^4.8.0
+  react-paginate: ^8.2.0
   react-router-dom: ^6.10.0
   react-toastify: ^9.1.2
   react-transition-group: ^4.4.5
@@ -24,6 +25,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.8.0_react@18.2.0
+  react-paginate: 8.2.0_react@18.2.0
   react-router-dom: 6.10.0_biqbaboplfbrettd7655fr4n2y
   react-toastify: 9.1.2_biqbaboplfbrettd7655fr4n2y
   react-transition-group: 4.4.5_biqbaboplfbrettd7655fr4n2y
@@ -1026,6 +1028,15 @@ packages:
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+    dev: false
+
+  /react-paginate/8.2.0_react@18.2.0:
+    resolution: {integrity: sha512-sJCz1PW+9PNIjUSn919nlcRVuleN2YPoFBOvL+6TPgrH/3lwphqiSOgdrLafLdyLDxsgK+oSgviqacF4hxsDIw==}
+    peerDependencies:
+      react: ^16 || ^17 || ^18
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
     dev: false
 
   /react-router-dom/6.10.0_biqbaboplfbrettd7655fr4n2y:
