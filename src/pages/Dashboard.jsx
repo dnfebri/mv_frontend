@@ -28,7 +28,7 @@ const Dashboard = () => {
 
   const toastId = React.useRef(null);
   useEffect(() => {
-    if (isSuccess && toastId.current === null) {
+    if (isSuccess) {
       toastId.current = toast.success(message, {
         position: toast.POSITION.TOP_RIGHT,
       });

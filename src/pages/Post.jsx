@@ -36,7 +36,7 @@ const Post = () => {
       setIsError(false);
       setMessage("");
     }
-  }, [isSuccess, isError, message]);
+  }, [isSuccess, isError, message, toastId]);
   return (
     <Layout>
       <ToastContainer />

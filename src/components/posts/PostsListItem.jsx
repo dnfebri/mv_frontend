@@ -4,9 +4,13 @@ import { useLocation } from "react-router-dom";
 import { useStoreApp } from "../../app/Store";
 import { usePost } from "../../app/usePost";
 import axios from "axios";
+import { useAuth } from "../../app/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const PostsListItem = props => {
+  const navigate = useNavigate();
   const { data } = props;
+  const { username } = useAuth();
   const {
     isLoading,
     isSuccess,
@@ -47,6 +51,51 @@ const PostsListItem = props => {
       deletePost(id);
     }
   };
+  const handleLike = async id => {
+    try {
+      const response = await axios.put(
+        `${process.env.API_URL_APP}/post/like/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      const result = await response.data;
+      setProses(result.success, result.message);
+    } catch (error) {
+      console.log(error);
+      const status = await error.response.status;
+      if (status === 403 || status === 401) {
+        navigate("/login");
+      }
+    }
+  };
+  const handleUnLike = async id => {
+    try {
+      const response = await axios.put(
+        `${process.env.API_URL_APP}/post/unlike/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      const result = await response.data;
+      setProses(result.success, result.message);
+    } catch (error) {
+      console.log(error);
+      const status = await error.response.status;
+      if (status === 403 || status === 401) {
+        navigate("/login");
+      }
+    }
+  };
+  // data.map((r, i) => {
+  //   console.log(r.user_like_posts.length > 0);
+  // });
   return (
     <div className="flex flex-wrap justify-evenly gap-4">
       {data.map((row, idx) => (
@@ -66,11 +115,29 @@ const PostsListItem = props => {
               pathname.includes("post") ? "pb-12" : "pb-5"
             }`}
           >
-            <div className="flex items-center gap-2 text-lg text-blue-700">
+            <div className="flex h-8 items-center gap-2 text-lg text-blue-700">
               {/* <AiFillLike /> {row.likes} */}
-              <button>
-                <AiOutlineLike />
-              </button>
+              {row.user_like_posts.length > 0 ? (
+                <>
+                  {/* <AiFillLike /> */}
+                  {row.user_like_posts.map((like, i) => {
+                    return like.user.username === username &&
+                      like.like !== 0 ? (
+                      <button key={i} onClick={() => handleUnLike(row.id)}>
+                        <AiFillLike />
+                      </button>
+                    ) : i + 1 == row.user_like_posts.length ? (
+                      <button key={i} onClick={() => handleLike(row.id)}>
+                        <AiOutlineLike />
+                      </button>
+                    ) : null;
+                  })}
+                </>
+              ) : (
+                <button onClick={() => handleLike(row.id)}>
+                  <AiOutlineLike />
+                </button>
+              )}
               <p>{row.likes > 0 ? row.likes : ""}</p>
             </div>
             <h5 className="text-lg tracking-tight text-blue-900 dark:text-blue-300">
