@@ -12,11 +12,13 @@ import { AiFillCaretRight } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../app/useAuth";
 // import { useUser } from '../../app/useUser';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const SideBar = () => {
   const navigate = useNavigate();
+  const { resetAuth } = useAuth();
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const Open = useSidebarOpen(state => state.open);
   const SidebarOpen = useSidebarOpen(state => state.setSidebarOpen);
@@ -42,6 +44,7 @@ const SideBar = () => {
         }
       );
       localStorage.removeItem("access_token");
+      resetAuth();
       navigate("/login");
     } catch (error) {
       console.log(error);

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { create } from "zustand";
 
-const authMe = create(set => ({
+const stateAuth = {
   auth: false,
   idUser: 0,
   name: "",
@@ -10,7 +10,9 @@ const authMe = create(set => ({
   email: "",
   photo: "",
   authMesaage: "",
-}));
+};
+
+const authMe = create(set => stateAuth);
 
 export const useAuth = () => {
   const auth = authMe(e => e.auth);
@@ -27,6 +29,7 @@ export const useAuth = () => {
   }, [auth]);
 
   const getAuthMe = async () => {
+    if (auth) return;
     try {
       const res = await axios.get(`${process.env.API_URL_APP}/user`, {
         headers: {
@@ -51,6 +54,10 @@ export const useAuth = () => {
     }
   };
 
+  const resetAuth = () => {
+    authMe.setState(stateAuth);
+  };
+
   return {
     getAuthMe,
     auth,
@@ -60,5 +67,6 @@ export const useAuth = () => {
     email,
     photo,
     authMesaage,
+    resetAuth,
   };
 };

@@ -47,7 +47,6 @@ const PostsList = () => {
         },
       });
       const result = await response.data;
-      console.log(result);
       setPosts(result.data.result);
       setLimit(result.data.pagination.limit);
       setPage(result.data.pagination.page);
@@ -66,9 +65,8 @@ const PostsList = () => {
     if (isSuccess) {
       getPosts(page);
       setProses(false, "");
-    } else {
-      if (auth) getPosts(page);
     }
+    if (auth) getPosts(page);
   }, [isSuccess, auth]);
 
   const hendelSearch = e => {

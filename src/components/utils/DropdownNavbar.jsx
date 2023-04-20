@@ -9,7 +9,8 @@ import Logout from "./Logout";
 
 const DropdownNavbar = () => {
   const navigate = useNavigate();
-  const { auth, name, username, email, photo, getAuthMe } = useAuth();
+  const { auth, name, username, email, photo, getAuthMe, resetAuth } =
+    useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isImageExists, setIsImageExists] = useState(false);
   const trigger = useRef(null);
@@ -34,7 +35,6 @@ const DropdownNavbar = () => {
   // }, [localStorage, auth])
   // close on click outside
   useEffect(() => {
-    imageExists(photo);
     const clickHandler = ({ target }) => {
       if (
         !dropdownOpen ||
@@ -50,6 +50,7 @@ const DropdownNavbar = () => {
 
   // close if the esc key is pressed
   useEffect(() => {
+    imageExists(photo);
     if (!auth) {
       getAuthMe();
     }
@@ -97,6 +98,7 @@ const DropdownNavbar = () => {
       );
       localStorage.removeItem("access_token");
       navigate("/login");
+      resetAuth();
     } catch (error) {
       console.log(error);
       // setMessage(error.response.data);
@@ -113,7 +115,13 @@ const DropdownNavbar = () => {
       >
         <img
           className="w-8 h-8 rounded-full object-cover object-center"
-          src={isImageExists ? photo : process.env.API_URL_APP + photo}
+          src={
+            auth
+              ? isImageExists
+                ? photo
+                : process.env.API_URL_APP + photo
+              : "/images/noImage.jpg"
+          }
           width="32"
           height="32"
           alt="User"

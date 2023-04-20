@@ -6,6 +6,7 @@ import { useStoreApp } from "../app/Store";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { useAuth } from "../app/useAuth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Login = () => {
     setMessage,
   } = useStoreApp();
   const [inputs, setInputs] = useState({});
-
+  const { auth, getAuthMe } = useAuth();
   const storedDarkMode = localStorage.getItem("dark-mode");
   const [isDarkMode, setIsDarkMode] = useState(
     storedDarkMode === null ? false : storedDarkMode === "true"
@@ -44,6 +45,9 @@ const Login = () => {
   useEffect(() => {
     localStorage.setItem("dark-mode", isDarkMode);
     const html = window.document.documentElement;
+    if (auth) {
+      navigate("/");
+    }
     if (isDarkMode) {
       html.classList.add("dark");
     } else {
@@ -65,7 +69,7 @@ const Login = () => {
     // if (localStorage.getItem("access_token")) {
     //   getAuth();
     // }
-  }, [isDarkMode, isSuccess, isError, message]);
+  }, [auth, isDarkMode, isSuccess, isError, message]);
 
   const handleChange = event => {
     const name = event.target.name;
@@ -86,7 +90,7 @@ const Login = () => {
       setProses(await data.success, await data.message);
       localStorage.setItem("access_token", data.data.token);
       setIsLoading(false);
-      navigate("/");
+      getAuthMe();
     } catch (error) {
       console.log(error);
       setIsLoading(false);

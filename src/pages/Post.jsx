@@ -23,7 +23,6 @@ const Post = () => {
   const { postId, isShowModal, setIsShowModal, isNameModal, setIsNameModal } =
     usePost();
   const { idUser } = useAuth();
-  console.log(idUser);
   const toastId = useRef(null);
   useEffect(() => {
     if (isSuccess) {

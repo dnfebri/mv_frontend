@@ -43,7 +43,6 @@ const ChangePassword = () => {
         }
       );
       const data = await response.data;
-      console.log(data.message);
       setProses(data.success, data.message);
       setIsLoading(false);
       setInputs({});
@@ -61,7 +60,6 @@ const ChangePassword = () => {
   const toastId = React.useRef(null);
   useEffect(() => {
     if (isSuccess) {
-      console.log(isSuccess);
       toastId.current = toast.success(message, {
         position: toast.POSITION.TOP_RIGHT,
       });
