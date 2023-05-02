@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { create } from "zustand";
+import zukeeper from "zukeeper";
 
 const stateAuth = {
   auth: false,
@@ -12,7 +13,7 @@ const stateAuth = {
   authMesaage: "",
 };
 
-const authMe = create(set => stateAuth);
+const authMe = create(zukeeper(set => stateAuth));
 
 export const useAuth = () => {
   const auth = authMe(e => e.auth);
@@ -70,3 +71,5 @@ export const useAuth = () => {
     resetAuth,
   };
 };
+
+window.store = useAuth;

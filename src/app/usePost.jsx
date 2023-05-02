@@ -1,12 +1,17 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { create } from "zustand";
+import zukeeper from "zukeeper";
 
-const postStore = create(set => ({
-  postId: 0,
-  isShowModal: false,
-  isNameModal: "",
-}));
+const postStore = create(
+  zukeeper(set => ({
+    postId: 0,
+    isShowModal: false,
+    isNameModal: "",
+  }))
+);
+
+window.store = postStore;
 
 export const usePost = () => {
   const postId = postStore(e => e.postId);

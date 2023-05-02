@@ -17,6 +17,7 @@ specifiers:
   react-transition-group: ^4.4.5
   tailwindcss: ^3.3.1
   vite: ^4.2.0
+  zukeeper: ^1.0.2
   zustand: ^4.3.7
 
 dependencies:
@@ -29,6 +30,7 @@ dependencies:
   react-router-dom: 6.10.0_biqbaboplfbrettd7655fr4n2y
   react-toastify: 9.1.2_biqbaboplfbrettd7655fr4n2y
   react-transition-group: 4.4.5_biqbaboplfbrettd7655fr4n2y
+  zukeeper: 1.0.2
   zustand: 4.3.7_react@18.2.0
 
 devDependencies:
@@ -1292,6 +1294,10 @@ packages:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
     dev: true
+
+  /zukeeper/1.0.2:
+    resolution: {integrity: sha512-mffz8JpzC96B3Gpoixklfl2/wY4KsYxZvgPRLFMIqAvEQeMPTjLYG8oUWXm9eoItU/nQ5Lt0G2b0GcZRDGzVgA==}
+    dev: false
 
   /zustand/4.3.7_react@18.2.0:
     resolution: {integrity: sha512-dY8ERwB9Nd21ellgkBZFhudER8KVlelZm8388B5nDAXhO/+FZDhYMuRnqDgu5SYyRgz/iaf8RKnbUs/cHfOGlQ==}

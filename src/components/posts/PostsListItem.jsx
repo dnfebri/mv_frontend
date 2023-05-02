@@ -97,6 +97,16 @@ const PostsListItem = props => {
   // data.map((r, i) => {
   //   console.log(r.user_like_posts.length > 0);
   // });
+
+  const chekLike = data => {
+    let userLike = false;
+    data.map((like, i) => {
+      if (like.user.username === username && like.like !== 0) {
+        return (userLike = true);
+      }
+    });
+    return userLike;
+  };
   return (
     <div className="flex flex-wrap justify-evenly gap-4">
       {data.length > 0 ? (
@@ -120,22 +130,17 @@ const PostsListItem = props => {
               >
                 <div className="flex h-8 items-center gap-2 text-lg text-blue-700">
                   {/* <AiFillLike /> {row.likes} */}
+                  {/* <AiFillLike /> */}
                   {row.user_like_posts.length > 0 ? (
-                    <>
-                      {/* <AiFillLike /> */}
-                      {row.user_like_posts.map((like, i) => {
-                        return like.user.username === username &&
-                          like.like !== 0 ? (
-                          <button key={i} onClick={() => handleUnLike(row.id)}>
-                            <AiFillLike />
-                          </button>
-                        ) : i + 1 == row.user_like_posts.length ? (
-                          <button key={i} onClick={() => handleLike(row.id)}>
-                            <AiOutlineLike />
-                          </button>
-                        ) : null;
-                      })}
-                    </>
+                    chekLike(row.user_like_posts) ? (
+                      <button onClick={() => handleUnLike(row.id)}>
+                        <AiFillLike />
+                      </button>
+                    ) : (
+                      <button onClick={() => handleLike(row.id)}>
+                        <AiOutlineLike />
+                      </button>
+                    )
                   ) : (
                     <button onClick={() => handleLike(row.id)}>
                       <AiOutlineLike />
