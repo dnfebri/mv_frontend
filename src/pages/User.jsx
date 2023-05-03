@@ -57,12 +57,16 @@ const User = () => {
     }
   };
   const imageExists = async url => {
-    try {
-      const result = await axios.get(url);
+    if (url === "https://picsum.photos/200") {
       setIsImageExists(true);
-    } catch (error) {
-      setIsImageExists(false);
+      return;
     }
+    // try {
+    //   const result = await axios.get(url);
+    //   setIsImageExists(true);
+    // } catch (error) {
+    //   setIsImageExists(false);
+    // }
   };
   const toastId = React.useRef(null);
   useEffect(() => {
